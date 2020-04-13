@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <div class = "header">Header</div> 
+   <div class="container">
+            <div class="projects-overview">
+                <div class = "projects-header">Projects</div>
+                <div class = 'form'>               
+                    <div> Title: <input id="titleproject" data-title-project type="text"> </div>
+                    <div><input type= "button" value=submit onclick="newProject()"></div>
+                    <button class="btn delete" data-delete-project-button>Delete selected project</button>
+
+                </div>
+                <div class="project-output" id = "project-output" data-projectoutput></div>  
+            </div>
+            
+        <div class= "to-do-overview">
+           <div class = "to-do-header">To Do List</div>
+            <div class = 'form'>               
+                <div> Title: <input id="title" type="text"> </div>
+                <div> Description: <input id = "description" type="text"> </div>
+                <div> Due date: <input id="due-date" type="number"></div>
+                <div><input type= "button" value=submit onclick="getToDoInput()"></div>
+            </div>
+           <div class="to-do-output" id = "to-do-output"></div>     
+        </div>
+
+    </div> 
+
+</body>
+<script src="main.js"></script>
+</html>
