@@ -37,6 +37,7 @@ let selectedList = projectlist.find(projectlist => projectlist.id === selectedLi
    
  }
  else listContainer.style.display = ""
+ renderToDoList(selectedList)
  
 
 }
@@ -55,7 +56,9 @@ function renderProject() {
 }
 projectcontainer.addEventListener('click', e=> {
   if (e.target.tagName.toLowerCase() === 'li') {
-      selectedListId = e.target.dataset.listId   
+      selectedListId = e.target.dataset.listId
+      
+         
   }
 })
 projectdeletebutton.addEventListener('click', e => {
@@ -107,8 +110,8 @@ function getToDoInput() {
       
 }
 function renderToDoList(selectedList)
- {
-  selectedList.Todolist.forEach((Todolist) => {
+ {  listContainer.innerHTML=""
+    selectedList.Todolist.forEach((Todolist) => {
     let todoinfo = document.createElement("div")
     todoinfo.classList.add('todoinfo')
     todoinfo.innerHTML= Todolist.title + " " + Todolist.description + " " + Todolist.dueDate
