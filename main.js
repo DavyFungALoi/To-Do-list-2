@@ -6,10 +6,20 @@ const projectdeletebutton = document.querySelector(
   "[data-delete-project-button"
 );
 
+let toDoListTitle = document.getElementById("title");
+let toDoListdescription = document.getElementById("description");
+let toDoListdueDate = document.getElementById("due-date");
+const listContainer = document.getElementById("to-do-output");
+const listDisplayContainer = document.querySelector("[list-display-container]")
+
 /*Local Storage */
 const LOCAL_STORAGE_LIST_KEY = "project.lists";
 let projectlist =
   JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)) || [];
+const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.selectedListId'
+let selectedListId = localStorage.getItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY)
+
+  
 
 /* projectlists */
 
@@ -32,14 +42,19 @@ function newProject() {
 
 function render() {
   renderProject();
-
+  console.log("hello")
   let selectedList = projectlist.find(
     (projectlist) => projectlist.id === selectedListId
   );
-  if ((selectedList = null)) {
-    listContainer.style.display = "none";
-  } else listContainer.style.display = "";
-  renderToDoList(selectedList);
+  console.log(selectedList)
+  if (selectedList= null) {
+    console.log("empty")
+    listDisplayContainer.style.display = 'none'
+  } else listDisplayContainer.style.display = "";
+    clearElement(listContainer)
+    renderToDoList(selectedListId)
+    
+   
 }
 
 function renderProject() {
@@ -55,7 +70,8 @@ function renderProject() {
 projectcontainer.addEventListener("click", (e) => {
   if (e.target.tagName.toLowerCase() === "li") {
     selectedListId = e.target.dataset.listId;
-  }
+      saveAndRender()
+    }
 });
 projectdeletebutton.addEventListener("click", (e) => {
   projectlist = projectlist.filter(
@@ -67,22 +83,17 @@ projectdeletebutton.addEventListener("click", (e) => {
 
 function save() {
   localStorage.setItem(LOCAL_STORAGE_LIST_KEY, JSON.stringify(projectlist));
+  localStorage.setItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY, selectedListId)
 }
 
 function saveAndRender() {
   save();
   render();
 }
-renderProject();
+render()
 
 /* To-Do-Lists */
 
-/* To-Do-Lists DOM */
-
-let toDoListTitle = document.getElementById("title");
-let toDoListdescription = document.getElementById("description");
-let toDoListdueDate = document.getElementById("due-date");
-const listContainer = document.getElementById("to-do-output");
 
 const toDoListFactory = (title, description, dueDate, priority) => {
   return {
@@ -99,39 +110,26 @@ function getToDoInput() {
   const listDueDate = toDoListdueDate.value;
   if (listName == null || listName === "") return;
   const listoutput = toDoListFactory(listName, listDescription, listDueDate);
-  const selectedList = projectlist.find(
+  let selectedList = projectlist.find(
     (projectlist) => projectlist.id === selectedListId
   );
   selectedList.Todolist.push(listoutput);
-  renderToDoList(selectedList);
+  renderToDoList(selectedListId);
 }
-function renderToDoList(selectedList) {
-  listContainer.innerHTML = "";
-  selectedList.Todolist.forEach((Todolist) => {
+function renderToDoList(selectedListId) {
+  let selectedList = projectlist.find(
+    (projectlist) => projectlist.id === selectedListId
+  )
+     selectedList.Todolist.forEach((todo) => {
     let todoinfo = document.createElement("div");
     todoinfo.classList.add("todoinfo");
     todoinfo.innerHTML =
-      Todolist.title + " " + Todolist.description + " " + Todolist.dueDate;
+      todo.title + " " + todo.description + " " + todo.dueDate;
     listContainer.appendChild(todoinfo);
   });
 }
-/* renderToDoList()*/
-
-/*
-const Todolist = []
-function submittodo() {
-  document.getElementById("to-do-output").innerHTML=""
-    let title = document.getElementById("title").value
-    let description = document.getElementById("description").value
-    let dueDate = document.getElementById("due-date").value
-  Todolist.push(toDoListFactory(title, description, dueDate))
-  Todolist.forEach((Todolist, index) => {
-    let todoinfo = document.createElement("div")
-    todoinfo.classList.add('todoinfo')
-    todoinfo.innerHTML= Todolist.title + " " + Todolist.description + " " + Todolist.dueDate
-    document.getElementById("to-do-output").appendChild(todoinfo)
-    
-  });
-        
+function clearElement(element) {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild)
+  }
 }
-*/
